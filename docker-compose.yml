@@ -1,0 +1,25 @@
+version: '3.6'
+services:
+  mongo:
+    restart: always
+    image: mongo:5.0.4
+    volumes:
+      - db_data:/data/db
+
+  unpub:
+    restart: always
+    depends_on:
+      - mongo
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 4000:4000
+    environment:
+      - UNPUB_MONGODB=mongodb://mongo:27017/dart_pub
+    volumes:
+      - packages:/app/packages
+    
+volumes:
+  packages:
+  db_data:
